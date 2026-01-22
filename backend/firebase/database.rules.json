@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "live_metrics": {
+      ".read": "auth != null",
+      ".write": false
+    }
+  }
+}
