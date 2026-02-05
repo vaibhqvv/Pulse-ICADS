@@ -1,0 +1,86 @@
+%YAML 1.1
+---
+# network variables
+vars:
+  address-groups:
+    HOME_NET: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
+    EXTERNAL_NET: "!$HOME_NET"
+    HTTP_SERVERS: "$HOME_NET"
+    DNS_SERVERS: "$HOME_NET"
+  port-groups:
+    HTTP_PORTS: "80"
+    SHELLCODE_PORTS: "!80"
+    SSH_PORTS: "22"
+    DNS_PORTS: "53"
+
+# logging outputs
+outputs:
+  # EVE JSON log - primary output consumed by ICADS ingestion.py
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: /var/log/suricata/eve.json
+      # types of events to log
+      types:
+        - alert:
+            payload: yes
+            payload-printable: yes
+            packet: yes
+            metadata: yes
+            http-body: yes
+            http-body-printable: yes
+        - stats:
+            totals: yes
+            threads: no
+            deltas: no
+        - dns:
+            enabled: yes
+        - http:
+            extended: yes
+
+  - fast:
+      enabled: yes
+      filename: /var/log/suricata/fast.log
+
+detect-engine:
+  - profile: medium
+  - custom-values:
+      toclient-groups: 3
+      toserver-groups: 25
+
+threading:
+  set-cpu-affinity: no
+  detect-thread-ratio: 1.0
+
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+    dns:
+      enabled: yes
+      tcp:
+        enabled: yes
+      udp:
+        enabled: yes
+    tls:
+      enabled: yes
+    ssh:
+      enabled: yes
+
+default-rule-path: /etc/suricata/rules
+
+rule-files:
+  - local.rules
+
+classification-file: /etc/suricata/classification.config
+reference-config-file: /etc/suricata/reference.config
+
+logging:
+  default-log-level: notice
+  outputs:
+    - console:
+        enabled: yes
+    - file:
+        enabled: yes
+        filename: /var/log/suricata/suricata.log
+        level: info
