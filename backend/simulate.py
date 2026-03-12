@@ -144,12 +144,10 @@ def run_simulation(mode: str, duration: int):
     alerts_per_min = params["alerts_per_minute"]
     interval = 60.0 / alerts_per_min
 
-    mode_display = "🟢 NORMAL" if mode == "normal" else "🔴 DDoS ATTACK"
+    mode_display = "NORMAL" if mode == "normal" else "DDoS ATTACK"
     logger.info(f"")
-    logger.info(f"{'='*60}")
     logger.info(f"  Simulation Mode: {mode_display}")
     logger.info(f"  Duration: {duration}s | Rate: {alerts_per_min} alerts/min")
-    logger.info(f"{'='*60}")
     logger.info(f"")
 
     start_time = time.time()
@@ -197,24 +195,20 @@ def run_simulation(mode: str, duration: int):
 
     elapsed = time.time() - start_time
     logger.info(f"")
-    logger.info(f"{'─'*60}")
     logger.info(f"  {mode_display} Summary:")
     logger.info(f"    Alerts sent:     {alert_count}")
     logger.info(f"    Snapshots:       {snapshot_count}")
     logger.info(f"    Duration:        {elapsed:.1f}s")
     logger.info(f"    Avg rate:        {alert_count/max(elapsed/60, 0.01):.1f} alerts/min")
-    logger.info(f"{'─'*60}")
 
     return alert_count, snapshot_count
 
 
 def run_mixed_mode(duration: int):
     logger.info(f"")
-    logger.info(f"{'='*60}")
-    logger.info(f"  🔄 MIXED MODE — Alternating Normal ↔ Attack")
+    logger.info(f" MIXED MODE — Alternating Normal ↔ Attack")
     logger.info(f"  Total duration: {duration}s")
     logger.info(f"  Switching every 60 seconds")
-    logger.info(f"{'='*60}")
     logger.info(f"")
 
     start_time = time.time()
@@ -245,13 +239,11 @@ def run_mixed_mode(duration: int):
 
     elapsed = time.time() - start_time
     logger.info(f"")
-    logger.info(f"{'='*60}")
-    logger.info(f"  🔄 MIXED MODE Complete")
+    logger.info(f"MIXED MODE Complete")
     logger.info(f"    Total alerts:    {total_alerts}")
     logger.info(f"    Total snapshots: {total_snapshots}")
     logger.info(f"    Total duration:  {elapsed:.1f}s")
     logger.info(f"    Cycles:          {cycle}")
-    logger.info(f"{'='*60}")
 
 
 def main():
@@ -273,10 +265,8 @@ def main():
 
     args = parser.parse_args()
 
-    logger.info("=" * 60)
     logger.info("  Pulse Traffic Simulator v1.0")
     logger.info("  Mode: %s | Duration: %ds", args.mode, args.duration)
-    logger.info("=" * 60)
 
     try:
         firebase_client.initialize()
